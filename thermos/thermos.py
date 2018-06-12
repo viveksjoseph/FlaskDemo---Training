@@ -16,9 +16,10 @@ class User:
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', titles = ["Title passed", "Another title"], 
-                                        user = User("Vivek", "Joseph"), 
-                                        alt_user = User("Lakshay", "Khatter"))
+    return render_template('index.html', titles = ["Some passed", "Title passed", "Another passed"], 
+                                        user = User("SomeName1", "SomeName2"), 
+                                        alt_user = User("Name1", "Name2"),
+                                        third_user = User("AnotherName1", "AnotherName2"))
 
 if __name__ == '__main__':
     app.run(debug=True)
