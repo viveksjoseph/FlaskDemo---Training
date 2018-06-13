@@ -27,5 +27,15 @@ def index():
 def add():
     return render_template('add.html')
 
+# 404 error page
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+# 500 error page
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.hmtl'), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
