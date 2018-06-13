@@ -13,6 +13,7 @@ class User:
     def __str__(self):
         return self.firstName + " " +self.lastName
 
+# Basic View
 @app.route('/')
 @app.route('/index')
 def index():
@@ -20,6 +21,11 @@ def index():
                                         user = User("SomeName1", "SomeName2"), 
                                         alt_user = User("Name1", "Name2"),
                                         third_user = User("AnotherName1", "AnotherName2"))
+
+# Bookmarks View
+@app.route('/add')
+def add():
+    return render_template('add.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
