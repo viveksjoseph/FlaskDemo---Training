@@ -164,7 +164,7 @@ a:visited{
     color: #1e5373;
 }
 
-h1,h2,h3,h4,h5,h6,{
+h1, h2, h3, h4, h5, h6{
     color: #1e5373;
 }
 
@@ -176,7 +176,7 @@ footer h3{
 /* flashes styling */
 
 .flashes ul{
-    margin: 0,0;
+    margin: 0 0;
     background: #ffd6a3;
     color: #000;
 
@@ -193,6 +193,23 @@ article.flashes{
     margin-bottom:  1em;
 }
 
+/* Error Styling */
+
+.error, .error input{
+    color: red;
+}
+
+tr.error td ul{
+    margin-top: 0;
+}
+
+tr.submit button{
+    margin-top: 20px;
+}
+
+input, button{
+    margin-left: 10px
+}
 
 /* ==========================================================================
    Media Queries
