@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_moment import Moment
 
 #path to current python file
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,6 +22,9 @@ login_manager = LoginManager()
 login_manager.session_protection = "strong"
 login_manager.login_view = "login"  # redirect to login page if no login detected
 login_manager.init_app(app)
+
+#For displaying timestamps
+moment = Moment(app)
 
 import thermos.models
 import thermos.views
