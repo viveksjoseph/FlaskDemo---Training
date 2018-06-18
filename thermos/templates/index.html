@@ -24,10 +24,10 @@ Thermos -- Welcome
                         <li>
                             <a href='{{ url_for('user', username=bm.user.username) }}'>{{ bm.user.username }}</a> Added <a href="{{ bm.url }}">{{ bm.description }}</a>
                         </li>
+                    {% else %}
+                        <p>No bookmarks yet.</p>
                     {% endfor %}
                 </ul>
-            {% else %}
-                No bookmarks yet.
             {% endif %}
         </section>
         <section>
