@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, flash, request
+from flask import render_template, url_for, redirect, flash, request, abort
 from flask_login import login_required, login_user, logout_user, current_user
 
 from thermos import app, db, login_manager
@@ -15,7 +15,7 @@ def load_user(user_id):
 def index():
     return render_template('index.html', new_bookmarks = Bookmark.newest(5))
 
-# Bookmarks View
+# Add bookmarks View
 @app.route('/add', methods = ['GET', 'POST'])
 @login_required
 def add():
@@ -28,7 +28,22 @@ def add():
         db.session.commit()
         flash("Stored bookmark '{}'".format(description))
         return redirect(url_for('index'))
-    return render_template('add.html', form = form)
+    return render_template('bookmark_form.html', form = form, title="Add a bookmark")
+
+# Edit bookmarks View
+@app.route('/edit/<int:bookmark_id>', methods=['GET', 'POST'])
+@login_required
+def edit_bookmark(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    if (current_user != bookmark.user):
+        abort(403)
+    form = BookmarkForm(obj=bookmark)
+    if form.validate_on_submit():
+        form.populate_obj(bookmark)
+        db.session.commit()
+        flash("Edited bookmark '{}'".format(bookmark.description))
+        return redirect(url_for('user', username=current_user.username))
+    return render_template('bookmark_form.html', form=form, title="Edit bookmark")
 
 # User View
 @app.route('/user/<username>')
@@ -74,6 +89,11 @@ def signup():
 @app.errorhandler(401)
 def page_not_authorized(e):
     return render_template('401.html'), 401
+
+# 403 error page
+@app.errorhandler(403)
+def page_not_authorized(e):
+    return render_template('403.html'), 403
 
 # 404 error page
 @app.errorhandler(404)
