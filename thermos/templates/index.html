@@ -15,19 +15,13 @@ Thermos -- Welcome
             </p>
         </header>
         <section>
-            <h2>
-                Recently Added:
-            </h2>
-            {% if new_bookmarks %}
-                <ul>
-                    {% for bm in new_bookmarks %}
-                        <li>
-                            <a href='{{ url_for('user', username=bm.user.username) }}'>{{ bm.user.username }}</a> Added <a href="{{ bm.url }}">{{ bm.description }}</a>
-                        </li>
-                    {% else %}
-                        <p>No bookmarks yet.</p>
-                    {% endfor %}
-                </ul>
+            <h2>Recently Added: </h2>
+            {% if new_bookmarks.count() > 0 %}
+                {% with bookmarks = new_bookmarks %}
+                    {% include "bookmark_list.html" %}
+                {% endwith %}
+            {% else %}
+                <p>No bookmarks have been added yet.</p>
             {% endif %}
         </section>
         <section>
