@@ -2,5 +2,22 @@ Generic single-database configuration.
 
 #the keyword db is created in manager.py using MigrateCommand
 
+#to create db (Only once in a Project)
 python manager.py db init
+
+#generate a new migration snapshot
+python manager.py db migrate -m <tag name>
+
+#to upgrade db
 python manager.py db upgrade
+python manager.py db upgrade --tag <tag name>
+
+#to downgrade db
+python manager.py db downgrade
+python manager.py db downgrade --tag <tag name>
+
+#to drop db
+python manager.py dropdb
+
+#to load values
+python manager.py insert_data
