@@ -8,6 +8,7 @@ from thermos.models import User
 class BookmarkForm(FlaskForm):
     url = URLField('Enter URL for your bokmark: ', validators=[DataRequired(), url()])
     description = StringField('Add a description:')
+    tags = StringField('Tags: ', validators=[Regexp(r'^[A-Za-z0-9, ]*$', message="Tags can only contain letters and numbers")])
 
     def validate(self):
         if not (self.url.data.startswith("http://") or self.url.data.startswith("https://")):
@@ -18,6 +19,12 @@ class BookmarkForm(FlaskForm):
 
         if not self.description.data:
             self.description.data = self.url.data
+
+        #filter out empty and duplicate tag names
+        stripped = [t.strip() for t in self.tags.data.split(',')]
+        not_empty = [tag for tag in stripped if tag]    #remove empty strings
+        tagset = set(not_empty) #to remove duplicates
+        self.tags.data = ",".join(tagset)   #creating comma seperated values
 
         return True
 
