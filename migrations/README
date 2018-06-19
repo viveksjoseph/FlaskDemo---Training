@@ -1,1 +1,6 @@
 Generic single-database configuration.
+
+#the keyword db is created in manager.py using MigrateCommand
+
+python manager.py db init
+python manager.py db upgrade
