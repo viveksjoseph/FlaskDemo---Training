@@ -155,7 +155,19 @@ nav a:hover {
    /* link styling */
 
 
-a:hover, aside a:hover, aside a:visited{
+a:hover, aside a:hover, aside a:visited:hover{
+    color: #D39447;
+}
+
+aside a{
+    color: #ffd6a3;
+}
+
+aside a:hover{
+    color: #f5bb73;
+}
+
+aside a:visited{
     color: #D39447;
 }
 
@@ -217,7 +229,13 @@ ul.bookmarks {
     padding-left: 0;
 }
 
-ul.bookmarks li{
+ul.bookmarks li {
+    padding-bottom: .5em;
+    border-top: 1px solid #7ea6bf;
+    padding: 1em 0;
+}
+
+.bookmark {
     padding-bottom: .5em;
     border-top: 1px solid #7ea6bf;
     padding: 1em 0;
