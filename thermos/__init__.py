@@ -6,29 +6,37 @@ from flask_login import LoginManager
 from flask_moment import Moment
 from flask_debugtoolbar import DebugToolbarExtension
 
-#path to current python file
-basedir = os.path.abspath(os.path.dirname(__file__))
+from .config import config_by_name
 
-app = Flask(__name__)
-
-#Configure database
-app.config['SECRET_KEY'] = b'oy\xe6W\xe1\xddJ\xaa\x1f-$\xb6\xe0\x95d\xf3^\xc1\x10<]\xf4U\xf2'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'thermos.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['DEBUG'] = True
-db = SQLAlchemy(app)
+# Configure SQL Alchemy
+db = SQLAlchemy()
 
 #Configure authentication
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
-login_manager.login_view = "login"  # redirect to login page if no login detected
-login_manager.init_app(app)
+login_manager.login_view = "auth.login"  # redirect to login page if no login detected
 
 #Enable debug toolbar
-toolbar = DebugToolbarExtension(app)
+toolbar = DebugToolbarExtension()
 
 #For displaying timestamps
-moment = Moment(app)
+moment = Moment()
 
-import thermos.models
-import thermos.views
+def create_app(config_name):
+    app = Flask(__name__)
+    app.config.from_object(config_by_name[config_name])
+    db.init_app(app)
+    login_manager.init_app(app)
+    moment.init_app(app)
+    toolbar.init_app(app)
+
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint, url_prefix='/')
+
+    from .bookmarks import bookmarks as bookmark_blueprint
+    app.register_blueprint(bookmark_blueprint, url_prefix='/bookmarks')
+
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+
+    return app
