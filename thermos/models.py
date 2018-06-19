@@ -72,5 +72,9 @@ class Tag(db.Model):
         except:
             return Tag(name=name)
 
+    @staticmethod
+    def all():
+        return Tag.query.all()
+
     def __repr__(self):
         return self.name
