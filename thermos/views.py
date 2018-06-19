@@ -46,6 +46,21 @@ def edit_bookmark(bookmark_id):
         return redirect(url_for('user', username=current_user.username))
     return render_template('bookmark_form.html', form=form, title="Edit bookmark")
 
+# Delete bookmarks View
+@app.route('/delete/<int:bookmark_id>', methods=['GET', 'POST'])
+def delete_bookmark(bookmark_id):
+    bookmark = Bookmark.query.get_or_404(bookmark_id)
+    if (current_user != bookmark.user):
+        abort(403)
+    if (request.method == 'POST'):
+        db.session.delete(bookmark)
+        db.session.commit()
+        flash("deleted {}".format(bookmark.description))
+        return redirect(url_for('user', username=current_user.username))
+    else:
+        flash("Please confirm deleting this bookmark.")
+    return render_template('confirm_delete.html', bookmark=bookmark, nolinks=True)
+
 # User View
 @app.route('/user/<username>')
 def user(username):
@@ -86,6 +101,12 @@ def signup():
         return redirect(url_for('login'))
     return render_template("signup.html", form=form)
 
+# Tags View
+@app.route('/tag/<name>')
+def tag(name):
+    tag = Tag.query.filter_by(name=name).first_or_404()
+    return render_template('tag.html', tag=tag)
+
 # 401 error page
 @app.errorhandler(401)
 def page_not_authorized(e):
@@ -105,3 +126,7 @@ def page_not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template('500.html'), 500
+
+@app.context_processor
+def inject_tags():
+    return dict(all_tags=Tag.all)
